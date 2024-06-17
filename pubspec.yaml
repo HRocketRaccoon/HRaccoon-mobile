@@ -90,5 +90,34 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: KanitBlack
+      fonts:
+        - asset: assets/fonts/Kanit-Black.ttf
+    - family: KanitBold
+      fonts:
+        - asset: assets/fonts/Kanit-Bold.ttf
+    - family: KanitExtraBold
+      fonts:
+        - asset: assets/fonts/Kanit-ExtraBold.ttf
+    - family: KanitExtraLight
+      fonts:
+        - asset: assets/fonts/Kanit-ExtraLight.ttf
+    - family: KanitLight
+      fonts:
+        - asset: assets/fonts/Kanit-Light.ttf
+    - family: KanitMedium
+      fonts:
+        - asset: assets/fonts/Kanit-Medium.ttf
+    - family: KanitRegular
+      fonts:
+        - asset: assets/fonts/Kanit-Regular.ttf
+    - family: KanitSemiBold
+      fonts:
+        - asset: assets/fonts/Kanit-SemiBold.ttf
+    - family: KanitThin
+      fonts:
+        - asset: assets/fonts/Kanit-Thin.ttf
+  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
