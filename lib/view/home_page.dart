@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:hraccoon/model/seat_model.dart';
 import 'package:hraccoon/viewmodel/home_viewmodel.dart';
 import 'package:hraccoon/widget/seat_list_widget.dart';
 import 'package:hraccoon/widget/button_main_action.dart';
@@ -15,7 +17,9 @@ class HomePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             style: ButtonStyle(
               overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
               splashFactory: NoSplash.splashFactory,
@@ -86,7 +90,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildDropdown(BuildContext context, bool isOffice) {
-    final viewModel = context.watch<HomeViewModel>();
+    final HomeViewModel viewModel = context.watch<HomeViewModel>();
     final items = isOffice ? HomeViewModel.officeDropdownList : HomeViewModel.floorDropdownList;
     final value = isOffice ? viewModel.selectedOffice : viewModel.selectedFloor;
     return DropdownButton<String>(
@@ -110,19 +114,19 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildCurrentSeatInfo(BuildContext context) {
-    final viewModel = context.watch<HomeViewModel>();
+    final HomeViewModel viewModel = context.watch<HomeViewModel>();
 
-    if (viewModel.isSeatCanceled) {
+    if (viewModel.currentSeatNum == null || viewModel.isSeatCanceled) {
       return Container(
         height: 100,
         decoration: BoxDecoration(
           border: Border.all(color: Color(0xFF2659F1)),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Center(
+        child: const Center(
           child: Text(
             "사용하고 있는 좌석이 없습니다",
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'KanitRegular',
               fontSize: 20,
               color: Color(0xFF000000),
@@ -132,7 +136,7 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    final currentSeat = viewModel.seats.firstWhere((seat) => seat.isCurrent);
+    final Seat currentSeat = viewModel.seats.firstWhere((seat) => seat.number == viewModel.currentSeatNum);
 
     return Container(
       height: 100,
@@ -142,12 +146,12 @@ class HomePage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Container(
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Color(0xFF1FFA69),
+              color: const Color(0xFF1FFA69),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
@@ -162,7 +166,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,14 +7,32 @@ class HomeViewModel extends ChangeNotifier {
 
   String _selectedOffice = officeDropdownList.first;
   String _selectedFloor = floorDropdownList.first;
-  int? _currentSeatNum = 14; // 사용 중인 좌석 번호
+  int? _currentSeatNum;
   bool _isSeatCanceled = false;
   int? _expandedSeatNum;
 
-  List<Seat> _seats = List.generate(
-    20,
-        (index) => Seat(number: index + 1, office: '잠실 오피스', floor: '3층', isCurrent: index + 1 == 14),
-  );
+  final List<Seat> _seats = [
+    Seat(number: 1, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 2, office: '잠실 오피스', floor: '3층', isCurrent: true, employeeId: '12345', employeeName: '홍길동'),
+    Seat(number: 3, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 4, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 5, office: '잠실 오피스', floor: '3층', isCurrent: true, employeeId: '12346', employeeName: '김철수'),
+    Seat(number: 6, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 7, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 8, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 9, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 10, office: '잠실 오피스', floor: '3층', isCurrent: true, employeeId: '12347', employeeName: '이영희'),
+    Seat(number: 11, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 12, office: '잠실 오피스', floor: '3층', isCurrent: true, employeeId: '12348', employeeName: '박민수'),
+    Seat(number: 13, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 14, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 15, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 16, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 17, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 18, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 19, office: '잠실 오피스', floor: '3층', isCurrent: false),
+    Seat(number: 20, office: '잠실 오피스', floor: '3층', isCurrent: false),
+  ];
 
   String get selectedOffice => _selectedOffice;
   String get selectedFloor => _selectedFloor;
@@ -35,12 +53,10 @@ class HomeViewModel extends ChangeNotifier {
 
   void cancelSeat() {
     if (_currentSeatNum != null) {
-      _seats[_currentSeatNum! - 1] = Seat(
-        number: _currentSeatNum!,
-        office: _seats[_currentSeatNum! - 1].office,
-        floor: _seats[_currentSeatNum! - 1].floor,
-        isCurrent: false,
-      );
+      int seatIndex = _seats.indexWhere((seat) => seat.number == _currentSeatNum);
+      if (seatIndex != -1) {
+        _seats[seatIndex] = Seat(number: _currentSeatNum!, office: _seats[seatIndex].office, floor: _seats[seatIndex].floor, isCurrent: false,);
+      }
       _currentSeatNum = null;
       _isSeatCanceled = true;
       notifyListeners();
@@ -49,22 +65,20 @@ class HomeViewModel extends ChangeNotifier {
 
   void selectSeat(int seatNum) {
     if (_currentSeatNum != null) {
-      _seats[_currentSeatNum! - 1] = Seat(
-        number: _currentSeatNum!,
-        office: _seats[_currentSeatNum! - 1].office,
-        floor: _seats[_currentSeatNum! - 1].floor,
-        isCurrent: false,
-      );
+      int currentSeatIndex = _seats.indexWhere((seat) => seat.number == _currentSeatNum);
+      if (currentSeatIndex != -1) {
+        _seats[currentSeatIndex] = Seat(number: _currentSeatNum!, office: _seats[currentSeatIndex].office, floor: _seats[currentSeatIndex].floor, isCurrent: false,);
+      }
     }
-    _currentSeatNum = seatNum;
-    _seats[seatNum - 1] = Seat(
-      number: seatNum,
-      office: _seats[seatNum - 1].office,
-      floor: _seats[seatNum - 1].floor,
-      isCurrent: true,
-    );
-    _isSeatCanceled = false;
-    notifyListeners();
+
+    int seatIndex = _seats.indexWhere((seat) => seat.number == seatNum);
+
+    if (seatIndex != -1) {
+      _currentSeatNum = seatNum;
+      _seats[seatIndex] = Seat(number: seatNum, office: _seats[seatIndex].office, floor: _seats[seatIndex].floor, isCurrent: true, employeeId: '99999', employeeName: '사용자명',);
+      _isSeatCanceled = false;
+      notifyListeners();
+    }
   }
 
   void expandSeat(int seatNum) {

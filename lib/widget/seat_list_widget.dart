@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hraccoon/model/seat_model.dart';
 import 'package:provider/provider.dart';
+import 'package:hraccoon/viewmodel/home_viewmodel.dart';
 
-import '../viewmodel/home_viewmodel.dart';
 import 'button_main_action.dart';
 
 class SeatListWidget extends StatelessWidget {
@@ -13,14 +13,18 @@ class SeatListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<HomeViewModel>();
+    final HomeViewModel viewModel = context.watch<HomeViewModel>();
     final isExpanded = viewModel.expandedSeatNum == seat.number;
+    final bool isRedSeat = seat.isCurrent && seat.employeeId != '99999';
+    final Color seatColor = seat.isCurrent
+        ? (isRedSeat ? Color(0xFFFF3535) : Color(0xFF1FFA69))
+        : Color(0xFFD9D9D9);
 
     return Column(
       children: [
         Container(
           height: 60,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(color: Color(0xFFE4F1FA), width: 1),
             ),
@@ -31,7 +35,7 @@ class SeatListWidget extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: seat.isCurrent ? Color(0xFF1FFA69) : Color(0xFFD9D9D9),
+                  color: seatColor,
                 ),
                 child: Center(
                   child: Text(
@@ -82,14 +86,58 @@ class SeatListWidget extends StatelessWidget {
           ),
         ),
         if (isExpanded)
-          buttonMainAction(
-            context: context,
-            text: "사용하기",
-            onPressed: () {
-              viewModel.selectSeat(seat.number);
-              viewModel.collapseSeat();
-            },
-          ),
+          seat.isCurrent
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFF2659F1)),
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(flex: 2),
+                        Text(
+                          '사번: ${seat.employeeId}',
+                          style: const TextStyle(
+                            fontFamily: 'KanitRegular',
+                            fontSize: 16,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                        const Spacer(flex: 1),
+                        Text(
+                          '사원명: ${seat.employeeName}',
+                          style: const TextStyle(
+                            fontFamily: 'KanitRegular',
+                            fontSize: 16,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                        const Spacer(flex: 2),
+                        if (seat.employeeId == '99999')
+                          buttonMainAction(
+                            context: context,
+                            text: "취소하기",
+                            onPressed: () {
+                              viewModel.cancelSeat();
+                              viewModel.collapseSeat();
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ) : buttonMainAction(
+                  context: context,
+                  text: "사용하기",
+                  onPressed: () {
+                    viewModel.selectSeat(seat.number);
+                    viewModel.collapseSeat();
+                  },
+                ),
       ],
     );
   }

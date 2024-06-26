@@ -78,7 +78,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _textField(String hintText, TextEditingController controller, bool obscureText) {
-    return Container(
+    return SizedBox(
       height: 52,
       child: TextField(
         controller: controller,
