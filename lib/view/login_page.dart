@@ -6,8 +6,8 @@ import 'package:hraccoon/config/route_name.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final List<String> employNum = ['A000004', 'A000005', 'A000006'];
-  final List<String> password = ['A1b!2c3d', 'P@ssw0rd', 'Qw3\$rty4'];
+  final List<String> employNum = ['A000004', 'A000005', 'A000006', 'test'];
+  final List<String> password = ['A1b!2c3d', 'P@ssw0rd', 'Qw3\$rty4', 'test'];
 
   @override
   Widget build(BuildContext context) {
